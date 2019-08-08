@@ -1,0 +1,17 @@
+{
+    "editor.minimap.enabled": false,
+    "workbench.colorTheme": "Dark+ Material",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.tips.enabled": false,
+    "material-icon-theme.activeIconPack": "none",
+    "material-icon-theme.folders.theme": "none",
+    "python.analysis.openFilesOnly": false,
+    "python.autoComplete.addBrackets": true,
+    "python.dataScience.allowImportFromNotebook": false,
+    "python.dataScience.allowInput": false,
+    "python.dataScience.allowLiveShare": false,
+    "python.dataScience.changeDirOnImportExport": false,
+    "python.dataScience.searchForJupyter": false,
+    "python.dataScience.showJupyterVariableExplorer": false,
+    "python.dataScience.useDefaultConfigForJupyter": false
+}
