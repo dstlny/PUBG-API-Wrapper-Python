@@ -1,7 +1,7 @@
 # PUBG-API-Wrapper-Python
 Small wrapper written in Python, which simplifies querying the PUBG API. 
 
-## Pre-Requisites and Usage of CLI version of the application
+# Pre-Requisites and Usage of CLI version of the application
 <details>
    <summary>Click to see!</summary>
    
