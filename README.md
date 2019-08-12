@@ -55,11 +55,14 @@ Small wrapper written in Python, which simplifies querying the PUBG API.
 <details>
    <summary>Click to see!</summary>
    
-   1. Make sure `GUI` is set to `True` within `config/user_settings.py` 
-      * If you want to pre-load settings, fill out the following
-         * A valid PUBG Developer `API_TOKEN` - Located in `config/APISettings.py`
-         * A valid PUBG Username for `PLAYER_NAME` - Located in `user_settings.py`
-         * A valid integer for `MATCH_INTEGER` - Located in `user_settings.py`
+   <br />
+   
+   1. Do the following:
+      - Make sure `GUI` is set to `True` within `config/user_settings.py` 
+         * If you want to pre-load settings, fill out the following
+            * A valid PUBG Developer `API_TOKEN` - Located in `config/APISettings.py`
+            * A valid PUBG Username for `PLAYER_NAME` - Located in `user_settings.py`
+            * A valid integer for `MATCH_INTEGER` - Located in `user_settings.py`
    2. Executing `api_interface` will launch the GUI, which looks like below:
 
    ![GUI](https://i.imgur.com/2I2aXUR.png)
