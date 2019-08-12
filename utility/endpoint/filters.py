@@ -10,6 +10,6 @@ class APIFilter(Enum):
     def buildPlayerFilter(_BASE, _PLAYER_NAME):
         return _BASE+APIFilter.PLAYER_FILTER.value+_PLAYER_NAME
     def buildSeasonFilter(_BASE,_SEASON, _PLAYER_ID):
-        return _BASE+APIFilter.SEASON_FILTER.value.replace('$accountId', _PLAYER_ID).replace('$seasonID', _SEASON.value) 
+        return _BASE+APIFilter.SEASON_FILTER.value.replace('$accountId', _PLAYER_ID).replace('$seasonID', _SEASON) 
     def buildLifeTimeFilter(_BASE, _PLAYER_ID):
         return _BASE+APIFilter.LIFETIME_FILTER.value.replace('$accountId', _PLAYER_ID)

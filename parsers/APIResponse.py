@@ -16,6 +16,8 @@ from exceptions.playerNotFound import playerNotFound
 from exceptions.seasonStatsNotFound import seasonStatsNotFound
 from exceptions.connectionTimeOut import connectionTimeOut
 
+from config import user_settings
+
 class APIResponse():
 
     _SEASON = ""
@@ -57,7 +59,7 @@ class APIResponse():
 
         if self._SEASON:
             _URL = APIFilter.buildSeasonFilter(_BASE_URL, self._SEASON, self._LOCAL_PLAYER.getPlayerID())
-            _STATS.append(f"\tSeason '{self._SEASON.value}' stats for {self._LOCAL_PLAYER.NAME} in {self._GAMEMODE.upper()}")
+            _STATS.append(f"\tSeason '{self._SEASON}' stats for {self._LOCAL_PLAYER.NAME} in {self._GAMEMODE.upper()}")
         else:
             _URL = APIFilter.buildLifeTimeFilter(_BASE_URL, self._LOCAL_PLAYER.getPlayerID())
             _STATS.append(f"\tLifetime stats for {self._LOCAL_PLAYER.NAME} in {self._GAMEMODE.upper()}")
@@ -73,8 +75,10 @@ class APIResponse():
 
         if 'errors' in _RESPONSE:
             
-            ## If we get an error, make sure that we have the URL correct - since /steam doesn't work for games which require a REGION SHARD.
-            _USER_REGION = input(f"Enter a region, one of the following:\n {[x for x in _REGIONS]}\n")
+            if user_settings.GUI:
+                _USER_REGION = self._LOCAL_PLAYER.REGION
+            else:
+                _USER_REGION = input(f"Enter a region, one of the following:\n {[x for x in _REGIONS]}\n")
 
             if _USER_REGION.lower() not in _REGIONS:
                 raise ValueError(f"Region isn't correct, it must be one of the following: {[x for x in _REGIONS]}\n")
@@ -143,13 +147,27 @@ class APIResponse():
         if self._SEASON and self._WEAPONS == 0 and self._ASSISTS == 0 and self._VEHICLES  == 0 and self._REVIVES  == 0 and self._KILLS  == 0 and self._HEADSHOTS == 0 and self._HEALS  == 0 and self._DAMAGE  == 0 and self._DOWNS  == 0 and self._BOOSTS  == 0 and self._ASSISTS == 0:
             seasonStatsNotFound(self._SEASON, self._LOCAL_PLAYER.NAME)
 
-        print('\n')
-        for _DISPLAY_LINE in _STATS:
-            print(_DISPLAY_LINE)
+        if self._SEASON and user_settings.GUI:
+            _FILENAME = f'DATA/{self._SEASON}-Stats.txt'
+        elif not self._SEASON and user_settings.GUI:
+            _FILENAME = f'DATA/Lifetime-{self._LOCAL_PLAYER.NAME}-{self._GAMEMODE.upper()}-Stats.txt'
+        
+        
+        if user_settings.GUI:
+            with open(_FILENAME, 'w+', encoding='utf-8') as f:
+                for _DISPLAY_LINE in _STATS:
+                    f.write(_DISPLAY_LINE+'\n')
 
-        if self._GAMEMODE in _GAMEMODE_TYPES:
-            print(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
+                if self._GAMEMODE in _GAMEMODE_TYPES:
+                    f.write(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
         else:
             print('\n')
+            for _DISPLAY_LINE in _STATS:
+                print(_DISPLAY_LINE)
+    
+            if self._GAMEMODE in _GAMEMODE_TYPES:
+                print(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
+            else:
+                print('\n')
 
 

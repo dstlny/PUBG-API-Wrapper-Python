@@ -1,0 +1,68 @@
+	Season 'division.bro.official.pc-2018-01' stats for dstlny in FPP
+	=================================
+	DUO-FPP stats
+	- Total of 0 chicken dinners
+	- Total of 112 kills, with 26 being headshots
+	- Averages 7 daily kills
+	- Has dealt 14385.93 damage
+	- 6 kill assists
+	- Longest kill of 230.77928m
+	- Highest kill-round of 7 kills
+	- Downed 63 players
+	- Revived 10 team-mates
+	- Accidentally killed 0 team-mates
+	- Currently sits at 1759 rankpoints, with Title of Novice II
+	- 64 losses out of 64 games
+	- Destroyed 1 vehicles
+	- Acquired 241 weapons
+	- Consumed 89 boosts
+	- Consumed 74 heals
+	- Swam 132.6225m
+	=================================
+	SOLO-FPP stats
+	- Total of 3 chicken dinners
+	- Total of 230 kills, with 70 being headshots
+	- Averages 7 daily kills
+	- Has dealt 29553.209 damage
+	- 17 kill assists
+	- Longest kill of 316.02853m
+	- Highest kill-round of 8 kills
+	- Currently sits at 2015 rankpoints, with Title of Experienced V
+	- 187 losses out of 190 games
+	- Destroyed 0 vehicles
+	- Acquired 783 weapons
+	- Consumed 370 boosts
+	- Consumed 162 heals
+	- Swam 129.71094m
+	=================================
+	SQUAD-FPP stats
+	- Total of 2 chicken dinners
+	- Total of 81 kills, with 13 being headshots
+	- Averages 0 daily kills
+	- Has dealt 12236.553 damage
+	- 22 kill assists
+	- Longest kill of 181.35526m
+	- Highest kill-round of 6 kills
+	- Downed 95 players
+	- Revived 12 team-mates
+	- Accidentally killed 3 team-mates
+	- Currently sits at 1333 rankpoints, with Title of Novice IV
+	- 54 losses out of 55 games
+	- Destroyed 1 vehicles
+	- Acquired 196 weapons
+	- Consumed 48 boosts
+	- Consumed 54 heals
+	- Swam 0m
+	=================================
+	- Total of 423 kills
+	- Total of 5 chicken dinners
+	- Total of 109 headshots
+	- Total of 56175.69 damage dealt
+	- Total of 90 assists
+	- Total of 158 player knocks
+	- Total of 507 boosts consumed
+	- Total of 290 heals consumed
+	- Total of 3 team-kills
+	- Total of 2 vehicles destroyed
+	- Total of 1220 weapons acquired
+	- Total of 22 revives

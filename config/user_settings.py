@@ -4,75 +4,64 @@ from utility.platforms.seasons.season_shards import PCSeasons, PS4Seasons, XBOXS
     MATCH_INTEGER
     - Any integer.
     ----------------------------------------------------------
-    PLAYER_GAME_MODE
-    - ALL / all (Displays FPP and TPP lifetime stats)
-    - FPP / fpp (Displays FPP only lifetime stats)
-    - SOLO-FPP / solo-fpp (Displays only solo FPP lifetime stats)
-    - DUO-FPP-FPP / duo-fpp (Displays only duo FPP lifetime stats)
-    - SQUAD-FPP / squad-fpp (Displays only squad FPP lifetime stats)
-    - TPP / tpp (Displays TPP only lifetime stats)
-    - DUO / duo (Displays only duo TPP lifetime stats)
-    - SOLO / solo (Displays only  solo TPP lifetime stats)
-    - SQUAD / squad (Displays only squad TPP lifetime stats)
-    ----------------------------------------------------------
-    PLAYER_GAME_MODE
-    - XBOX / xbox
-    - PC / pc
-    - PSN / psn
-    - KAKAO / kakao
-    ----------------------------------------------------------
     PLAYER_NAME
     - The players name you want to lookup
     ----------------------------------------------------------
+    GUI
+    - True or False
+      - If True, program will be executed as a GUI.
+      - If False, will be executed as a Console Application.
+    ----------------------------------------------------------
+    MATCH_INTEGER
+    - Any integer.
+    ----------------------------------------------------------
+    PLAYER_PLATFORM
+    1. XBOX
+    2. PSN
+    or 
+    3. PC
+    ----------------------------------------------------------
     SEASON_VAL
-    - Platform season
-
-    List of PC/Kakao Seasons, oldest to newest:
-        BETA_0 = 'division.bro.official.2017-beta'
-        BETA_1 = 'division.bro.official.2017-pre1'
-        BETA_2 = 'division.bro.official.2017-pre2'
-        BETA_3 = 'division.bro.official.2017-pre3'
-        BETA_4 = 'division.bro.official.2017-pre4'
-        BETA_5 = 'division.bro.official.2017-pre5'
-        BETA_6 = 'division.bro.official.2017-pre6'
-        BETA_7 = 'division.bro.official.2017-pre7'
-        BETA_8 = 'division.bro.official.2017-pre8'
-        BETA_9 = 'division.bro.official.2017-pre9'
-        RELEASE_1 ='division.bro.official.2018-01'
-        RELEASE_2 ='division.bro.official.2018-02'
-        RELEASE_3 ='division.bro.official.2018-03'
-        RELEASE_4 ='division.bro.official.2018-04'
-        RELEASE_5 ='division.bro.official.2018-05'
-        RELEASE_6 ='division.bro.official.2018-06'
-        RELEASE_7 ='division.bro.official.2018-07'
-        RELEASE_8 ='division.bro.official.2018-08'
-        RELEASE_9 ='division.bro.official.2018-09'
-        --- games before here need a region
-        RELEASE_10 ='division.bro.official.pc-2018-01',
-        RELEASE_11 ='division.bro.official.pc-2018-02',
-        RELEASE_12 ='division.bro.official.pc-2018-03',
-        RELEASE_13 ='division.bro.official.pc-2018-04'
-    List of Xbox Seasons:
-        RELEASE_1 ='division.bro.official.2018-05'
-        RELEASE_2 ='division.bro.official.2018-06'
-        RELEASE_3 ='division.bro.official.2018-07'
-        RELEASE_4 ='division.bro.official.2018-08'
-        --- games before here need a region
-        RELEASE_5 ='division.bro.official.xbox-01'
-        RELEASE_6 ='division.bro.official.xbox-02'
-        RELEASE_7 ='didvision.bro.official.xb-pre1's
-    List of Playstation Seasons:
-        RELEASE_1 ='division.bro.official.2018-09'
-        --- games before here need a region
-        RELEASE_2 ='division.bro.official.playstation-01'
-        RELEASE_3 ='division.bro.official.playstation-02'
-     ----------------------------------------------------------
-    SEASON
-    - True or False.
+    - A valid season for a valid platform
+    ----------------------------------------------------------
+    
 '''
 
+GUI = True
+
 PLAYER_NAME = ''
-PLAYER_PLATFORM = '' 
 MATCH_INTEGER = 0
+PLAYER_PLATFORM = ''
 PLAYER_GAME_MODE = ''
-SEASON_VAL = PCSeasons.RELEASE_13
+SEASON_VAL = PCSeasons.RELEASE_13.value
+
+_PYTHON_FILE_CONTENTS = r"""import time
+from os import system
+
+from api_interface import API_INTERFACE
+from helper.helperFunctions import regionCheck
+from config.APIConfig import APIConfig
+from config.APISettings import APISettings
+from config import user_settings
+
+user_input = input("\n\tPlease select one of the following options:\n\t1 - Lifetime Stats\n\t2 - Season Stats\n\t3 - x Amount of Match Stats\n\tInput choice: ")
+user_input = int(user_input)
+
+start_time = time.time()
+
+_HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()
+
+if user_input in range(1,4):
+
+    if user_input == 1: ##Lifetime
+        system('cls')
+        API_INTERFACE.lifetimeStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.PLAYER_GAME_MODE)
+    elif user_input == 2: ##Season
+        system('cls')
+        regionCheck(user_settings.SEASON_VAL)
+        API_INTERFACE.seasonStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.PLAYER_GAME_MODE, user_settings.SEASON_VAL)
+    elif user_input == 3: ##Match stats
+        system('cls')
+        API_INTERFACE.matchStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.MATCH_INTEGER)
+        
+    print("--- took %s seconds ---" % (time.time() - start_time))"""

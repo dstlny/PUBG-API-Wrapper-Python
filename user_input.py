@@ -7,12 +7,12 @@ from config.APIConfig import APIConfig
 from config.APISettings import APISettings
 from config import user_settings
 
-user_input = input(f"\n\tPlease select one of the following options:\n\t1 - Lifetime Stats\n\t2 - Season Stats\n\t3 - x Amount of Match Stats\n\tInput choice: ")
+user_input = input("\n\tPlease select one of the following options:\n\t1 - Lifetime Stats\n\t2 - Season Stats\n\t3 - x Amount of Match Stats\n\tInput choice: ")
 user_input = int(user_input)
 
 start_time = time.time()
 
-_HEADER = APIConfig(APISettings.API_TOKEN.value).setupAuth()
+_HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()
 
 if user_input in range(1,4):
 

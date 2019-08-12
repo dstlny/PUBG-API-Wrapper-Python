@@ -76,5 +76,5 @@ def regionCheck(season):
         'division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01','division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07',
         'division.bro.official.2018-08','division.bro.official-2018-09','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07', 'division.bro.official.2018-08','division.bro.official.2018-09']
 
-    if season.value in _NEEDS_REGION:
+    if season in _NEEDS_REGION:
         print('this season will need a region, which you will be asked to enter shortly')

@@ -1,4 +1,2 @@
-from enum import Enum
-
-class APISettings(Enum):
+class APISettings():
     API_TOKEN = ''

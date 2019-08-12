@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class PCSeasons(Enum):
     BETA_0 = 'division.bro.official.2017-beta'
     BETA_1 = 'division.bro.official.2017-pre1'
