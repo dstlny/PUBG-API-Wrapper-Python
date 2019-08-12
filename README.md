@@ -44,7 +44,7 @@ API_INTERFACE.seasonStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFO
 API_INTERFACE.matchStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.MATCH_INTEGER)
 ```
  
-# Using GUI version of the application:
+# Pre-Requisites and Usage of GUI version of the application:
 1. Make sure `GUI` is set to `True` within `config/user_settings.py` 
    [optional] If you want to pre-load settings, fill out the following:
       - A valid PUBG Developer `API_TOKEN` - Located in `config/APISettings.py`
