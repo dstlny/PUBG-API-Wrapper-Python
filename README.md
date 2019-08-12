@@ -1,7 +1,12 @@
 # PUBG-API-Wrapper-Python
-Small wrapper written in Python, which simplifies querying the PUBG API. 
+Small wrapper written in Python, which simplifies querying the PUBG API.
 
-# Pre-Requisites and Usage of CLI version of the application
+# Installation
+- git clone https://github.com/dstlny/PUBG-API-Wrapper-Python.git
+- cd PUBG-API-Wrapper-Python
+- pip install wxPython
+
+## Usage of CLI version of the application
 <details>
    <summary>Click to see!</summary>
    
@@ -51,7 +56,7 @@ Small wrapper written in Python, which simplifies querying the PUBG API.
    
 </details>
  
-# Pre-Requisites and Usage of GUI version of the application
+## Usage of GUI version of the application
 <details>
    <summary>Click to see!</summary>
    
