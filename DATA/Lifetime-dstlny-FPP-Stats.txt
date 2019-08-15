@@ -1,0 +1,65 @@
+	Lifetime stats for dstlny in FPP
+	=================================
+	DUO-FPP stats
+	- Total of 43 chicken dinners
+	- Total of 2123 kills, with 460 being headshots
+	- Averages 7 daily kills
+	- Has dealt 315628.47 damage
+	- 276 kill assists
+	- Longest kill of 515.4892m
+	- Highest kill-round of 12 kills
+	- Downed 1467 players
+	- Revived 327 team-mates
+	- Accidentally killed 44 team-mates
+	- 1290 losses out of 1331 games
+	- Destroyed 25 vehicles
+	- Acquired 6092 weapons
+	- Consumed 2356 boosts
+	- Consumed 2069 heals
+	- Swam 2312.878m
+	=================================
+	SOLO-FPP stats
+	- Total of 8 chicken dinners
+	- Total of 369 kills, with 108 being headshots
+	- Averages 6 daily kills
+	- Has dealt 47560.094 damage
+	- 30 kill assists
+	- Longest kill of 362.93307m
+	- Highest kill-round of 8 kills
+	- 253 losses out of 261 games
+	- Destroyed 2 vehicles
+	- Acquired 1142 weapons
+	- Consumed 598 boosts
+	- Consumed 256 heals
+	- Swam 238.23174m
+	=================================
+	SQUAD-FPP stats
+	- Total of 25 chicken dinners
+	- Total of 1214 kills, with 247 being headshots
+	- Averages 10 daily kills
+	- Has dealt 196901.06 damage
+	- 270 kill assists
+	- Longest kill of 407.02695m
+	- Highest kill-round of 10 kills
+	- Downed 1281 players
+	- Revived 205 team-mates
+	- Accidentally killed 29 team-mates
+	- 864 losses out of 883 games
+	- Destroyed 13 vehicles
+	- Acquired 3933 weapons
+	- Consumed 1343 boosts
+	- Consumed 1463 heals
+	- Swam 712.1157m
+	=================================
+	- Total of 3706 kills
+	- Total of 76 chicken dinners
+	- Total of 815 headshots
+	- Total of 560089.62 damage dealt
+	- Total of 1152 assists
+	- Total of 2748 player knocks
+	- Total of 4297 boosts consumed
+	- Total of 3788 heals consumed
+	- Total of 73 team-kills
+	- Total of 40 vehicles destroyed
+	- Total of 11167 weapons acquired
+	- Total of 532 revives

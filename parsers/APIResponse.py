@@ -57,9 +57,9 @@ class APIResponse():
         _PLATFORMS = ['steam','xbox','psn', 'kakao']
         _SEASON_LIST = ['division.bro.official.2017-beta','division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3','division.bro.official.2017-pre4','division.bro.official.2017-pre5','division.bro.official.2017-pre6','division.bro.official.2017-pre7','division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01', 'division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-07','division.bro.official.2018-08','division.bro.official.2018-09','division.bro.official.pc-2018-01', 'division.bro.official.pc-2018-02','division.bro.official.pc-2018-03','division.bro.official.pc-2018-04']
 
-        if self._SEASON:
+        if self._SEASON:    
             _URL = APIFilter.buildSeasonFilter(_BASE_URL, self._SEASON, self._LOCAL_PLAYER.getPlayerID())
-            _STATS.append(f"\tSeason '{self._SEASON}' stats for {self._LOCAL_PLAYER.NAME} in {self._GAMEMODE.upper()}")
+            _STATS.append(f"\'{self._SEASON}' stats")
         else:
             _URL = APIFilter.buildLifeTimeFilter(_BASE_URL, self._LOCAL_PLAYER.getPlayerID())
             _STATS.append(f"\tLifetime stats for {self._LOCAL_PLAYER.NAME} in {self._GAMEMODE.upper()}")
@@ -151,7 +151,6 @@ class APIResponse():
             _FILENAME = f'DATA/{self._SEASON}-Stats.txt'
         elif not self._SEASON and user_settings.GUI:
             _FILENAME = f'DATA/Lifetime-{self._LOCAL_PLAYER.NAME}-{self._GAMEMODE.upper()}-Stats.txt'
-        
         
         if user_settings.GUI:
             with open(_FILENAME, 'w+', encoding='utf-8') as f:

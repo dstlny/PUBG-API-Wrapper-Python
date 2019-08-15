@@ -7,7 +7,7 @@ from config.APISettings import APISettings
 from config import user_settings
 
 #import pythons Time lib
-import time
+import time, json
 
 class API_INTERFACE():
 
@@ -112,7 +112,6 @@ if user_settings.GUI:
 
             self._GAMEMODES = ['duo', 'squad', 'solo', 'duo-fpp', 'squad-fpp', 'solo-fpp', 'all', 'fpp', 'tpp']
 
-        
             self._PC_REGIONS = ['pc-eu', 'pc-as', 'pc-na', 'pc-oc', 'pc-jp', 'pc-krjp', 'pc-ru', 'pc-sa','pc-sea','pc-kakao']
             self._PC_SEASONS = ['division.bro.official.2017-beta','division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3','division.bro.official.2017-pre4','division.bro.official.2017-pre5','division.bro.official.2017-pre6','division.bro.official.2017-pre7','division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01', 'division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07','division.bro.official.2018-08','division.bro.official.2018-09','division.bro.official.pc-2018-01', 'division.bro.official.pc-2018-02','division.bro.official.pc-2018-03','division.bro.official.pc-2018-04']
             
@@ -184,8 +183,9 @@ if user_settings.GUI:
                 self.noOfMatches.Hide()
 
         def submitQuery(self, evt):
+            
             start_time = time.time()
-            _HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()
+            _HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()        
             _PLAT_CHOICE = self._PLATFORM_SELECT.GetItemLabel(self._PLATFORM_SELECT.GetSelection())
 
             _URL = Shard.buildURL(_PLAT_CHOICE)
@@ -210,8 +210,10 @@ if user_settings.GUI:
                             if self._CHOICES_SELECT.GetSelection() == 0:
                                 
                                 self.SetStatusText(f"Requesting and Parsing PUBG API Lifetime request for {_PLAYER}...")
+
                                 if _player_object.getAccountID(_PLAYER, _URL, 0, True) != False:
                                     _player_object.lifetimeStats(_URL, _MODE.lower())
+
                                 self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
                             elif self._CHOICES_SELECT.GetSelection() == 1:
@@ -221,13 +223,14 @@ if user_settings.GUI:
                                     _SEASON = self.seasonDropDown.GetValue()
 
                                     self.SetStatusText(f"Requesting and Parsing PUBG API season data for season {_SEASON}...")
+
                                     if _player_object.getAccountID(_PLAYER, _URL, 0, False) != False:
                                         _player_object.seasonStats(_URL, _MODE.lower(), _SEASON)
+
                                     self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
                                 else:
-                                    wx.MessageBox("Cannot enter non-numeric items",
-                                    "ERROR", wx.OK | wx.ICON_ERROR)
+                                    self.SetStatusText(f"ERROR: Cannot enter non-numeric characters in no-of-matches box!")
 
                             elif self._CHOICES_SELECT.GetSelection() == 2:
 
@@ -239,41 +242,35 @@ if user_settings.GUI:
 
                                     if _player_object.getAccountID(_PLAYER, _URL, int(_AMOUNT), False) != False:
                                         _player_object.displayMatches(_URL)
+                                        
                                     self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
                         else:
-                            wx.MessageBox("Players name cannot be empty!",
-                        "ERROR", wx.OK | wx.ICON_ERROR)
+                            self.SetStatusText(f"ERROR: Players name cannot be empty!")
 
                     else:
-                        wx.MessageBox("API Token cannot be empty!",
-                        "ERROR", wx.OK | wx.ICON_ERROR)
+                        self.SetStatusText(f"ERROR: API TOKEN cannot be empty!")
 
                 else:
-                    wx.MessageBox("Game Mode cannot be empty!",
-                    "ERROR", wx.OK | wx.ICON_ERROR)
+                    self.SetStatusText(f"ERROR: Game Mode cannot be empty!")
 
             else:
-                wx.MessageBox("Region cannot be empty!",
-                "ERROR", wx.OK | wx.ICON_ERROR)
+                self.SetStatusText(f"ERROR: Region cannot be empty!")
 
         def changeSeasonOrRegionCont(self, evt):
             if self._PLATFORM_SELECT.GetSelection() == 0:
-                self.regionDropDown.Clear()
-                self.regionDropDown.AppendItems(self._PC_REGIONS)
-                self.seasonDropDown.Clear()
-                self.seasonDropDown.AppendItems(self._PC_SEASONS)
+                self.clearAndAppend(self.regionDropDown, self._PC_REGIONS, self.seasonDropDown, self._PC_SEASONS)
             elif self._PLATFORM_SELECT.GetSelection() == 1:
-                self.regionDropDown.Clear()
-                self.regionDropDown.AppendItems(self._XBOX_REGIONS)
-                self.seasonDropDown.Clear()
-                self.seasonDropDown.AppendItems(self._XBOX_SEASONS)
+                self.clearAndAppend(self.regionDropDown, self._XBOX_REGIONS, self.seasonDropDown, self._XBOX_SEASONS)
             elif self._PLATFORM_SELECT.GetSelection() == 2:
-                self.regionDropDown.Clear()
-                self.regionDropDown.AppendItems(self._PSN_REGIONS)
-                self.seasonDropDown.Clear()
-                self.seasonDropDown.AppendItems(self._PSN_SEASONS)
+                self.clearAndAppend(self.regionDropDown, self._PSN_REGIONS, self.seasonDropDown, self._PSN_SEASONS)
 
+        def clearAndAppend(self, obj1, obj1_item, obj2, obj2_item):
+            obj1.Clear()
+            obj1.AppendItems(obj1_item)
+            obj2.Clear()
+            obj2.AppendItems(obj1_item)
+            
         def changeRegionContent(self, evt):
             
             if self._CHOICES_SELECT.GetSelection() == 0:

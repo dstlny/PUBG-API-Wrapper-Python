@@ -1,5 +1,3 @@
-import sys
-
 from config import user_settings
 
 if user_settings.GUI:

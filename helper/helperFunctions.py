@@ -1,3 +1,6 @@
+from config import user_settings
+
+
 def returnMapName(codename):
     map_dict = {
         "Baltic_Main": "Erangel",
@@ -9,72 +12,65 @@ def returnMapName(codename):
 
     return map_dict.get(codename.strip())
 
+class RangeDict(dict):
+    ''' 
+      An implementation of dict which allows you to use range as a key  
+    '''
+
+    def __getitem__(self, item):
+        if type(item) != range:
+            return ''.join([self[key] for key in self if item in key])
+        else:
+            return super().__getitem__(item)
+
 def getSeasonRank(rank):
 
-    rank = int(rank)
-    
-    if rank <= 0:
-        return 'Unranked'
-    elif 1 <= rank <= 199:
-        return 'Beginner V'
-    elif 200 <= rank <= 399:
-        return 'Beginner IV'
-    elif 400 <= rank <= 599:
-        return 'Beginner III'
-    elif 600 <= rank <= 799:
-        return 'Beginner II'
-    elif 800 <= rank <= 999:
-        return 'Beginner I'
-    elif 1000 <= rank <= 1199:
-        return 'Novice V'
-    elif 1200 <= rank <= 1399:
-        return 'Novice IV'
-    elif 1400 <= rank <= 1599:
-        return 'Novice III'
-    elif 1600 <= rank <= 1799:
-        return 'Novice II'
-    elif 1800 <= rank <= 1999:
-        return 'Novice I'
-    elif 2000  <= rank <= 2199:
-        return 'Experienced V'
-    elif 2200 <= rank <= 2399:
-        return 'Experienced IV'
-    elif 2400 <= rank <= 2599:
-        return 'Experienced III'
-    elif 2600 <= rank <= 2799:
-        return 'Experienced II'
-    elif 2800 <= rank <= 2999:
-        return 'Experienced I'
-    elif 3000 <= rank <= 3199:
-        return 'Skilled V'
-    elif 3200 <= rank <= 3399:
-        return 'Skilled IV'
-    elif 3400 <= rank <= 3599:
-        return 'Skilled III'
-    elif 3600 <= rank <= 3899:
-        return 'Skilled II'
-    elif 3800 <= rank <= 3999:
-        return 'Skilled I'
-    elif 4000 <= rank <= 4199:
-        return 'Specialist V'
-    elif 4200 <= rank <= 4399:
-        return 'Specialist IV'
-    elif 4400 <= rank <= 4599:
-        return 'Specialist III'
-    elif 4600 <= rank <= 4799:
-        return 'Specialist II'
-    elif 4800 <= rank <= 4999:
-        return 'Specialist I'
-    elif 5000 <= rank <= 5999:
-        return 'Expert'
-    else:
-        return 'Survivor'
+    check = RangeDict({
+        range(-20, 1): 'Unranked',
 
-def regionCheck(season):
+        range(1, 200): 'Beginner V', 
+        range(200, 400): 'Beginner IV', 
+        range(400, 600): 'Beginner III',
+        range(600, 800): 'Beginner II', 
+        range(800, 1000): 'Beginner I',
 
-    _NEEDS_REGION = ['division.bro.official.2017-beta', 'division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3', 'division.bro.official.2017-pre4', 'division.bro.official.2017-pre5', 'division.bro.official.2017-pre6', 'division.bro.official.2017-pre7',
-        'division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01','division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07',
-        'division.bro.official.2018-08','division.bro.official-2018-09','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07', 'division.bro.official.2018-08','division.bro.official.2018-09']
+        range(1000, 1200): 'Novice V',
+        range(1200, 1400): 'Novice IV',
+        range(1400, 1600): 'Novice III',
+        range(1600, 1800): 'Novice II', 
+        range(1800, 2000): 'Novice I', 
 
-    if season in _NEEDS_REGION:
-        print('this season will need a region, which you will be asked to enter shortly')
+        range(2000, 2200): 'Experienced V', 
+        range(2200, 2400): 'Experienced IV', 
+        range(2400, 2600): 'Experienced III', 
+        range(2600, 2800): 'Experienced II', 
+        range(2800, 3000): 'Experienced I', 
+
+        range(3000, 3200): 'Skilled V', 
+        range(3200, 3400): 'Skilled IV', 
+        range(3400, 3600): 'Skilled III', 
+        range(3600, 3800): 'Skilled II', 
+        range(3800, 4000): 'Skilled I', 
+
+        range(4000, 4200): 'Specialist V', 
+        range(4200, 4400): 'Specialist IV', 
+        range(4400, 4600): 'Specialist III', 
+        range(4600, 4800): 'Specialist II', 
+        range(4800, 5000): 'Specialist I', 
+
+        range(5000, 6000): 'Expert',
+
+        range(6000, 9999): 'Survivor'
+    })
+    return check[int(rank)]
+
+if not user_settings.GUI:
+
+    def regionCheck(season):
+
+        _NEEDS_REGION = ['division.bro.official.2017-beta', 'division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3', 'division.bro.official.2017-pre4', 'division.bro.official.2017-pre5', 'division.bro.official.2017-pre6', 'division.bro.official.2017-pre7',
+            'division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01','division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07',
+            'division.bro.official.2018-08','division.bro.official-2018-09','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07', 'division.bro.official.2018-08','division.bro.official.2018-09']
+
+        if season in _NEEDS_REGION:
+            print('this season will need a region, which you will be asked to enter shortly')

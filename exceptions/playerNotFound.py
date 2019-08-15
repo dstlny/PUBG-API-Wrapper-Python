@@ -7,6 +7,7 @@ if user_settings.GUI:
     def playerNotFound(player):
         wx.MessageBox(f'The PUBG API could not find a player named "{player}"',"Player not found", style=wx.OK|wx.ICON_ERROR)
         return
+        
 else:
 
     def playerNotFound(player):

@@ -1,0 +1,68 @@
+'division.bro.official.pc-2018-03' stats
+	=================================
+	DUO-FPP stats
+	- Total of 27 chicken dinners
+	- Total of 1181 kills, with 269 being headshots
+	- Averages 23 daily kills
+	- Has dealt 173653.92 damage
+	- 173 kill assists
+	- Longest kill of 515.4892m
+	- Highest kill-round of 12 kills
+	- Downed 818 players
+	- Revived 185 team-mates
+	- Accidentally killed 15 team-mates
+	- Currently sits at 4545 rankpoints, with Title of Specialist III
+	- 641 losses out of 666 games
+	- Destroyed 12 vehicles
+	- Acquired 3140 weapons
+	- Consumed 1382 boosts
+	- Consumed 1096 heals
+	- Swam 1528.9832m
+	=================================
+	SOLO-FPP stats
+	- Total of 4 chicken dinners
+	- Total of 97 kills, with 26 being headshots
+	- Averages 7 daily kills
+	- Has dealt 12301.435 damage
+	- 10 kill assists
+	- Longest kill of 362.93307m
+	- Highest kill-round of 6 kills
+	- Currently sits at 2201 rankpoints, with Title of Experienced IV
+	- 35 losses out of 39 games
+	- Destroyed 1 vehicles
+	- Acquired 213 weapons
+	- Consumed 148 boosts
+	- Consumed 66 heals
+	- Swam 70.981186m
+	=================================
+	SQUAD-FPP stats
+	- Total of 12 chicken dinners
+	- Total of 436 kills, with 98 being headshots
+	- Averages 19 daily kills
+	- Has dealt 74235.91 damage
+	- 104 kill assists
+	- Longest kill of 407.02695m
+	- Highest kill-round of 10 kills
+	- Downed 482 players
+	- Revived 95 team-mates
+	- Accidentally killed 8 team-mates
+	- Currently sits at 3341 rankpoints, with Title of Skilled IV
+	- 323 losses out of 333 games
+	- Destroyed 8 vehicles
+	- Acquired 1531 weapons
+	- Consumed 605 boosts
+	- Consumed 531 heals
+	- Swam 587.11084m
+	=================================
+	- Total of 1714 kills
+	- Total of 43 chicken dinners
+	- Total of 393 headshots
+	- Total of 260191.27 damage dealt
+	- Total of 574 assists
+	- Total of 1300 player knocks
+	- Total of 2135 boosts consumed
+	- Total of 1693 heals consumed
+	- Total of 23 team-kills
+	- Total of 21 vehicles destroyed
+	- Total of 4884 weapons acquired
+	- Total of 280 revives

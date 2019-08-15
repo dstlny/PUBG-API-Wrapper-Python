@@ -71,7 +71,7 @@ class player():
         _API_RESPONSE = json.loads(_PLAYER_REQUEST.text)
 
         if 'errors' in _API_RESPONSE:
-            playerNotFound()
+            playerNotFound(_PLAYER_NAME)
             return False
         else:
             
@@ -118,6 +118,7 @@ class player():
         _local_season = APIResponse(_GAME_MODE, self)
         _local_season.parseJSONSeasonAndLifetimeResponse(_BASE_URL)
 
+
     def setPlayerID(self, identity):
         self.ID = identity
 
@@ -133,8 +134,7 @@ class player():
     def setMatches(self, matches: list):
         
         if isinstance(matches, list):
-            for x in matches:
-                self.MATCH_IDS.append(x)
+            [self.MATCH_IDS.append(x) for x in matches]
         else:
             raise TypeError("Matches must be of type List")
 
@@ -159,7 +159,7 @@ class player():
 
         for _MATCH_ID in self.getMatches():
             
-            _URL = _BASE_URL+APIFilter.MATCH_FILTER.value+_MATCH_ID
+            _URL = _BASE_URL+APIFilter.MATCH_FILTER.value.replace('$matchID', _MATCH_ID)
 
             _REQUEST = requests.get(_URL, headers=self._HEADER)
 

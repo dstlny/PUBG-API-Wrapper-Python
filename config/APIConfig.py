@@ -11,7 +11,8 @@ class APIConfig():
             Sets up the authentication header which you will be sending to the PUBG API every request.
         '''
         _HEADER = {
-            "Authorization": self.returnAuthToken(), 
-            "Accept": "application/vnd.api+json"
+            "accept": "application/vnd.api+json",
+            "Authorization": "Bearer "+self.returnAuthToken()
         }
+
         return _HEADER
