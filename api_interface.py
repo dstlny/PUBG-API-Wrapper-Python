@@ -269,7 +269,7 @@ if user_settings.GUI:
             obj1.Clear()
             obj1.AppendItems(obj1_item)
             obj2.Clear()
-            obj2.AppendItems(obj1_item)
+            obj2.AppendItems(obj2_item)
             
         def changeRegionContent(self, evt):
             
