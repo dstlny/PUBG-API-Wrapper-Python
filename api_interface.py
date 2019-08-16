@@ -168,6 +168,7 @@ if user_settings.GUI:
             self.Bind(wx.EVT_BUTTON, self.submitQuery, source=self.submit)
 
         def hideOrShowRegion(self, bool1, bool2):
+            
             if bool1:
                 self.seasonLabel.Show()
                 self.seasonDropDown.Show()
