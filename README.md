@@ -1,12 +1,7 @@
 # PUBG-API-Wrapper-Python
-Small wrapper written in Python, which simplifies querying the PUBG API.
+Small wrapper written in Python, which simplifies querying the PUBG API. 
 
-# Installation
-- git clone https://github.com/dstlny/PUBG-API-Wrapper-Python.git
-- cd PUBG-API-Wrapper-Python
-- pip install -r requirements.txt
-
-## Usage of CLI version of the application
+# Pre-Requisites and Usage of CLI version of the application
 <details>
    <summary>Click to see!</summary>
    
@@ -56,18 +51,15 @@ Small wrapper written in Python, which simplifies querying the PUBG API.
    
 </details>
  
-## Usage of GUI version of the application
+# Pre-Requisites and Usage of GUI version of the application:
 <details>
    <summary>Click to see!</summary>
    
-   <br />
-   
-   1. Do the following:
-      - Make sure `GUI` is set to `True` within `config/user_settings.py` 
-         * If you want to pre-load settings, fill out the following
-            * A valid PUBG Developer `API_TOKEN` - Located in `config/APISettings.py`
-            * A valid PUBG Username for `PLAYER_NAME` - Located in `user_settings.py`
-            * A valid integer for `MATCH_INTEGER` - Located in `user_settings.py`
+   1. Make sure `GUI` is set to `True` within `config/user_settings.py` 
+      * If you want to pre-load settings, fill out the following:
+         - A valid PUBG Developer `API_TOKEN` - Located in `config/APISettings.py`
+         - A valid PUBG Username for `PLAYER_NAME` - Located in `user_settings.py`
+         - A valid integer for `MATCH_INTEGER` - Located in `user_settings.py`
    2. Executing `api_interface` will launch the GUI, which looks like below:
 
    ![GUI](https://i.imgur.com/2I2aXUR.png)

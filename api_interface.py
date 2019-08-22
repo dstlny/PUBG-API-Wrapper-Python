@@ -101,8 +101,10 @@ if user_settings.GUI:
             super(AppFrame, self).__init__(*args, **kw)
             # and a status bar
             self.CreateStatusBar()
-            self.SetStatusText("PUBG Developer API GUI Wrapper")
+            self.SetStatusText("Welcome!")
             self.SetSize(480, 250)
+            self.SetMaxSize((690, 250))
+            self.SetMinSize((480, 250))
             self.mainPanel()
 
         def mainPanel(self):
@@ -141,11 +143,20 @@ if user_settings.GUI:
             self.gameModeLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="Game Mode", pos=(100,80))
             self.gameModeDrop= wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self._GAMEMODES, pos=(100,100))
 
+
             self.apiTokenLabel= wx.StaticText(self.mainPanel, wx.ID_ANY, label="API Token", pos=(200,30))
-            self.apiTokenBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=APISettings.API_TOKEN, pos=(200,50))
+
+            if APISettings.API_TOKEN != "":
+                self.apiTokenBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=APISettings.API_TOKEN, pos=(200,50))
+            else:
+                self.apiTokenBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,50))
 
             self.playerNameLabel= wx.StaticText(self.mainPanel, wx.ID_ANY, label="Player Name", pos=(200,80))
-            self.playerNameBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=user_settings.PLAYER_NAME, pos=(200,100))
+
+            if user_settings.PLAYER_NAME != "":
+                self.playerNameBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=user_settings.PLAYER_NAME, pos=(200,100))
+            else:
+                self.playerNameBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,100))
 
             self._CHOICES_SELECT = wx.RadioBox(self.mainPanel, wx.ID_ANY, label="Options", pos=(320,30), choices=self._CHOICES, style=wx.RA_SPECIFY_ROWS)
 
@@ -153,7 +164,11 @@ if user_settings.GUI:
             self.seasonDropDown = wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self._PC_SEASONS, pos=(450,50))
 
             self.noOfMatchesLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="No of Matches", pos=(450,30))
-            self.noOfMatches = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=str(user_settings.MATCH_INTEGER), pos=(450,50))
+            
+            if user_settings.MATCH_INTEGER != 0:
+                self.noOfMatches = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=str(user_settings.MATCH_INTEGER), pos=(450,50))
+            else:
+                self.noOfMatches = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(450,50))
             
             self.submit = wx.Button(self.mainPanel, wx.ID_ANY, label="Query PUBG API", pos=(10,140), size=(440, 40))
             
@@ -215,8 +230,6 @@ if user_settings.GUI:
                                 if _player_object.getAccountID(_PLAYER, _URL, 0, True) != False:
                                     _player_object.lifetimeStats(_URL, _MODE.lower())
 
-                                self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
-
                             elif self._CHOICES_SELECT.GetSelection() == 1:
                                 
                                 if self.seasonDropDown.GetValue() != "":
@@ -227,8 +240,6 @@ if user_settings.GUI:
 
                                     if _player_object.getAccountID(_PLAYER, _URL, 0, False) != False:
                                         _player_object.seasonStats(_URL, _MODE.lower(), _SEASON)
-
-                                    self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
                                 else:
                                     self.SetStatusText(f"ERROR: Cannot enter non-numeric characters in no-of-matches box!")
@@ -243,8 +254,6 @@ if user_settings.GUI:
 
                                     if _player_object.getAccountID(_PLAYER, _URL, int(_AMOUNT), False) != False:
                                         _player_object.displayMatches(_URL)
-                                        
-                                    self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
                         else:
                             self.SetStatusText(f"ERROR: Players name cannot be empty!")
@@ -257,6 +266,8 @@ if user_settings.GUI:
 
             else:
                 self.SetStatusText(f"ERROR: Region cannot be empty!")
+
+            self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
         def changeSeasonOrRegionCont(self, evt):
             if self._PLATFORM_SELECT.GetSelection() == 0:

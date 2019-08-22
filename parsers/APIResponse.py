@@ -49,6 +49,7 @@ class APIResponse():
         if self._GAMEMODE.lower() not in _VALID:
             raise ValueError(f"Value must one of the following: {[x for x in _VALID]}")
 
+        _DATA = True
         _STATS = []
         _EXCLUDE_GAME_MODE_STATS = ['SOLO-FPP','SOLO']
         _GAMEMODE_TYPES = ['tpp', 'fpp', 'all']
@@ -72,7 +73,7 @@ class APIResponse():
 
         _REQUEST.close()
         _RESPONSE = json.loads(_REQUEST.text)
-
+        
         if 'errors' in _RESPONSE:
             
             if user_settings.GUI:
@@ -146,27 +147,29 @@ class APIResponse():
         ## Since the API just returns a blank fucking JSON file for a player which isn't in a season... we have to find some way to differentiate between a player which was around in this season, and not. This is the only way i could find.
         if self._SEASON and self._WEAPONS == 0 and self._ASSISTS == 0 and self._VEHICLES  == 0 and self._REVIVES  == 0 and self._KILLS  == 0 and self._HEADSHOTS == 0 and self._HEALS  == 0 and self._DAMAGE  == 0 and self._DOWNS  == 0 and self._BOOSTS  == 0 and self._ASSISTS == 0:
             seasonStatsNotFound(self._SEASON, self._LOCAL_PLAYER.NAME)
+            _DATA =  False
 
-        if self._SEASON and user_settings.GUI:
-            _FILENAME = f'DATA/{self._SEASON}-Stats.txt'
-        elif not self._SEASON and user_settings.GUI:
-            _FILENAME = f'DATA/Lifetime-{self._LOCAL_PLAYER.NAME}-{self._GAMEMODE.upper()}-Stats.txt'
-        
-        if user_settings.GUI:
-            with open(_FILENAME, 'w+', encoding='utf-8') as f:
-                for _DISPLAY_LINE in _STATS:
-                    f.write(_DISPLAY_LINE+'\n')
+        if _DATA:
+            if self._SEASON and user_settings.GUI:
+                _FILENAME = f'DATA/{self._SEASON}-Stats.txt'
+            elif not self._SEASON and user_settings.GUI:
+                _FILENAME = f'DATA/Lifetime-{self._LOCAL_PLAYER.NAME}-{self._GAMEMODE.upper()}-Stats.txt'
+            
+            if user_settings.GUI:
+                with open(_FILENAME, 'w+', encoding='utf-8') as f:
+                    for _DISPLAY_LINE in _STATS:
+                        f.write(_DISPLAY_LINE+'\n')
 
-                if self._GAMEMODE in _GAMEMODE_TYPES:
-                    f.write(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
-        else:
-            print('\n')
-            for _DISPLAY_LINE in _STATS:
-                print(_DISPLAY_LINE)
-    
-            if self._GAMEMODE in _GAMEMODE_TYPES:
-                print(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
+                    if self._GAMEMODE in _GAMEMODE_TYPES:
+                        f.write(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
             else:
                 print('\n')
+                for _DISPLAY_LINE in _STATS:
+                    print(_DISPLAY_LINE)
+        
+                if self._GAMEMODE in _GAMEMODE_TYPES:
+                    print(f"\t=================================\n\t- Total of {self._KILLS} kills\n\t- Total of {self._WINS} chicken dinners\n\t- Total of {self._HEADSHOTS} headshots\n\t- Total of {round(self._DAMAGE,2)} damage dealt\n\t- Total of {self._ASSISTS} assists\n\t- Total of {self._DOWNS} player knocks\n\t- Total of {self._BOOSTS} boosts consumed\n\t- Total of {self._HEALS} heals consumed\n\t- Total of {self._TEAMKILLS} team-kills\n\t- Total of {self._VEHICLES} vehicles destroyed\n\t- Total of {self._WEAPONS} weapons acquired\n\t- Total of {self._REVIVES} revives\n")
+                else:
+                    print('\n')
 
 
