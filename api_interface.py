@@ -62,7 +62,7 @@ class API_INTERFACE():
 
     def seasonStats(playerName: str, platform: str, auth_header, game_mode, _season):
         '''
-            Wrapper for lifetime stats.
+            Wrapper for season stats.
             playerName - the players name you want to lookup the lifetime stats of (case-sensitive)
             platform - the platform the player is playing on, can be one of the following:
             - XBOX / xbox
@@ -80,6 +80,7 @@ class API_INTERFACE():
             - DUO / duo (Displays only duo TPP lifetime stats)
             - SOLO / solo (Displays only  solo TPP lifetime stats)
             - SQUAD / squad (Displays only squad TPP lifetime stats)
+            _season - the season you want to query the API for.
         '''
 
         _URL = Shard.buildURL(platform)
