@@ -11,7 +11,7 @@ import time, json
 
 class API_INTERFACE():
 
-    def matchStats(playerName: str, platform: str, auth_header, amount: int):
+    def matchStats(playerName: str, platform: str, authheader, amount: int):
         '''
             Wrapper for a quick breakdown of player stats over a number of matches. 
             Also prints a table including each of these matches out to the console.
@@ -21,18 +21,18 @@ class API_INTERFACE():
             - PC / pc
             - PSN / psn
             - KAKAO / kakao
-            auth_header - the header we will use to contact the API.
+            authheader - the header we will use to contact the API.
             amount - amount of matches you want to display. 
             The amount of time the script will take to process the data, scales linearly with this.
         '''
         
-        _URL = Shard.buildURL(platform)
+        url = Shard.buildURL(platform)
 
-        _player_object = player(auth_header)
-        _player_object.getAccountID(playerName, _URL, amount, False)
-        _player_object.displayMatches(_URL)
+        playerObject = player(authheader)
+        playerObject.getAccountID(playerName, url, amount, False)
+        playerObject.displayMatches(url)
 
-    def lifetimeStats(playerName: str, platform: str, auth_header, game_mode):
+    def lifetimeStats(playerName: str, platform: str, authheader, gameplayerMode):
         '''
             Wrapper for lifetime stats.
             playerName - the players name you want to lookup the lifetime stats of (case-sensitive)
@@ -41,8 +41,8 @@ class API_INTERFACE():
             - PC / pc
             - PSN / psn
             - KAKAO / kakao
-            auth_header - the header we will use to contact the API.
-            game_mode - the game mode you want to lookup, one of the following:
+            authheader - the header we will use to contact the API.
+            gameplayerMode - the game mode you want to lookup, one of the following:
             - ALL / all (Displays FPP and TPP lifetime stats)
             - FPP / fpp (Displays FPP only lifetime stats)
             - SOLO-FPP / solo-fpp (Displays only solo FPP lifetime stats)
@@ -54,23 +54,23 @@ class API_INTERFACE():
             - SQUAD / squad (Displays only squad TPP lifetime stats)
         '''
 
-        _URL = Shard.buildURL(platform)
+        url = Shard.buildURL(platform)
 
-        _player_object = player(auth_header)
-        _player_object.getAccountID(playerName, _URL, 0, True)
-        _player_object.lifetimeStats(_URL, game_mode.lower())
+        playerObject = player(authheader)
+        playerObject.getAccountID(playerName, url, 0, True)
+        playerObject.lifetimeStats(url, gameplayerMode.lower())
 
-    def seasonStats(playerName: str, platform: str, auth_header, game_mode, _season):
+    def seasonStats(playerName: str, platform: str, authheader, gameplayerMode, seasonValue):
         '''
-            Wrapper for season stats.
+            Wrapper for lifetime stats.
             playerName - the players name you want to lookup the lifetime stats of (case-sensitive)
             platform - the platform the player is playing on, can be one of the following:
             - XBOX / xbox
             - PC / pc
             - PSN / psn
             - KAKAO / kakao
-            auth_header - the header we will use to contact the API.
-            game_mode - the game mode you want to lookup, one of the following:
+            authheader - the header we will use to contact the API.
+            gameplayerMode - the game mode you want to lookup, one of the following:
             - ALL / all (Displays FPP and TPP lifetime stats)
             - FPP / fpp (Displays FPP only lifetime stats)
             - SOLO-FPP / solo-fpp (Displays only solo FPP lifetime stats)
@@ -80,14 +80,13 @@ class API_INTERFACE():
             - DUO / duo (Displays only duo TPP lifetime stats)
             - SOLO / solo (Displays only  solo TPP lifetime stats)
             - SQUAD / squad (Displays only squad TPP lifetime stats)
-            _season - the season you want to query the API for.
         '''
 
-        _URL = Shard.buildURL(platform)
+        url = Shard.buildURL(platform)
 
-        _player_object = player(auth_header)
-        _player_object.getAccountID(playerName, _URL, 0, True)
-        _player_object.seasonStats(_URL, game_mode.lower(), _season)
+        playerObject = player(authheader)
+        playerObject.getAccountID(playerName, url, 0, True)
+        playerObject.seasonStats(url, gameplayerMode.lower(), seasonValue)
 
 if user_settings.GUI:
 
@@ -113,18 +112,18 @@ if user_settings.GUI:
             self.mainPanel = wx.Panel(self)
             self.mainPanel.SetBackgroundColour(wx.WHITE)
 
-            self._GAMEMODES = ['duo', 'squad', 'solo', 'duo-fpp', 'squad-fpp', 'solo-fpp', 'all', 'fpp', 'tpp']
+            self.gameModes = ['duo', 'squad', 'solo', 'duo-fpp', 'squad-fpp', 'solo-fpp', 'all', 'fpp', 'tpp']
 
-            self._PC_REGIONS = ['pc-eu', 'pc-as', 'pc-na', 'pc-oc', 'pc-jp', 'pc-krjp', 'pc-ru', 'pc-sa','pc-sea','pc-kakao']
-            self._PC_SEASONS = ['division.bro.official.2017-beta','division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3','division.bro.official.2017-pre4','division.bro.official.2017-pre5','division.bro.official.2017-pre6','division.bro.official.2017-pre7','division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01', 'division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07','division.bro.official.2018-08','division.bro.official.2018-09','division.bro.official.pc-2018-01', 'division.bro.official.pc-2018-02','division.bro.official.pc-2018-03','division.bro.official.pc-2018-04']
+            self.pcRegions = ['pc-eu', 'pc-as', 'pc-na', 'pc-oc', 'pc-jp', 'pc-krjp', 'pc-ru', 'pc-sa','pc-sea','pc-kakao']
+            self.pcSeasons = ['division.bro.official.2017-beta','division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3','division.bro.official.2017-pre4','division.bro.official.2017-pre5','division.bro.official.2017-pre6','division.bro.official.2017-pre7','division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01', 'division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07','division.bro.official.2018-08','division.bro.official.2018-09','division.bro.official.pc-2018-01', 'division.bro.official.pc-2018-02','division.bro.official.pc-2018-03','division.bro.official.pc-2018-04']
             
-            self._PSN_REGIONS = ['psn-as','psn-eu','psn-na','psn-oc']
-            self._PSN_SEASONS =['division.bro.official.2018-09',
+            self.psnRegions = ['psn-as','psn-eu','psn-na','psn-oc']
+            self.psnSeasons =['division.bro.official.2018-09',
                             'division.bro.official.playstation-01',
                             'division.bro.official.playstation-02']
             
-            self._XBOX_REGIONS = ['xbox-as','xbox-eu','xbox-na','xbox-oc', 'xbox-na']
-            self._XBOX_SEASONS = ['division.bro.official.2018-05',
+            self.xboxRegions = ['xbox-as','xbox-eu','xbox-na','xbox-oc', 'xbox-na']
+            self.xboxSeasons = ['division.bro.official.2018-05',
                             'division.bro.official.2018-06',
                             'division.bro.official.2018-07',
                             'division.bro.official.2018-08',
@@ -132,37 +131,37 @@ if user_settings.GUI:
                             'division.bro.official.xbox-02',
                             'division.bro.official.xb-pre1']
             
-            self._PLATFORMS = ['PC','XBOX','PSN']
-            self._CHOICES = ['Lifetime Statisics', 'Specific Season', 'X Matches']
+            self.platforms = ['PC','XBOX','PSN']
+            self.optionChoices = ['Lifetime Statisics', 'Specific Season', 'X Matches']
 
-            self.outer = wx.StaticBox(self.mainPanel, wx.ID_ANY, "Platform, Region, Token, Player details and option", size=(440, 125), pos=(10,10))
-            self._PLATFORM_SELECT = wx.RadioBox(self.mainPanel, wx.ID_ANY, label="Platform", pos=(20,30), choices=self._PLATFORMS, style=wx.RA_SPECIFY_ROWS)
+            self.outerBox = wx.StaticBox(self.mainPanel, wx.ID_ANY, "Platform, Region, Token, Player details and option", size=(440, 125), pos=(10,10))
+            self.platformSelect = wx.RadioBox(self.mainPanel, wx.ID_ANY, label="Platform", pos=(20,30), choices=self.platforms, style=wx.RA_SPECIFY_ROWS)
 
             self.regionLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="Region", pos=(100,30))
-            self.regionDropDown = wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self._PC_REGIONS, pos=(100,50))
+            self.regionDropDown = wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self.pcRegions, pos=(100,50))
 
             self.gameModeLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="Game Mode", pos=(100,80))
-            self.gameModeDrop= wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self._GAMEMODES, pos=(100,100))
+            self.gameModeDrop= wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self.gameModes, pos=(100,100))
 
 
             self.apiTokenLabel= wx.StaticText(self.mainPanel, wx.ID_ANY, label="API Token", pos=(200,30))
 
             if APISettings.API_TOKEN != "":
-                self.apiTokenBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=APISettings.API_TOKEN, pos=(200,50))
+                self.apiTokenBox = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=APISettings.API_TOKEN, pos=(200,50))
             else:
-                self.apiTokenBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,50))
+                self.apiTokenBox = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,50))
 
             self.playerNameLabel= wx.StaticText(self.mainPanel, wx.ID_ANY, label="Player Name", pos=(200,80))
 
             if user_settings.PLAYER_NAME != "":
-                self.playerNameBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=user_settings.PLAYER_NAME, pos=(200,100))
+                self.playerNameBox = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value=user_settings.PLAYER_NAME, pos=(200,100))
             else:
-                self.playerNameBox= wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,100))
+                self.playerNameBox = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(200,100))
 
-            self._CHOICES_SELECT = wx.RadioBox(self.mainPanel, wx.ID_ANY, label="Options", pos=(320,30), choices=self._CHOICES, style=wx.RA_SPECIFY_ROWS)
+            self.optionChoicesSelect = wx.RadioBox(self.mainPanel, wx.ID_ANY, label="Options", pos=(320,30), choices=self.optionChoices, style=wx.RA_SPECIFY_ROWS)
 
             self.seasonLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="Season", pos=(450,30))
-            self.seasonDropDown = wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self._PC_SEASONS, pos=(450,50))
+            self.seasonDropDown = wx.ComboBox(self.mainPanel, wx.ID_ANY, value="", choices=self.pcSeasons, pos=(450,50))
 
             self.noOfMatchesLabel = wx.StaticText(self.mainPanel, wx.ID_ANY, label="No of Matches", pos=(450,30))
             
@@ -171,17 +170,17 @@ if user_settings.GUI:
             else:
                 self.noOfMatches = wx.TextCtrl(self.mainPanel, wx.ID_ANY, value="", pos=(450,50))
             
-            self.submit = wx.Button(self.mainPanel, wx.ID_ANY, label="Query PUBG API", pos=(10,140), size=(440, 40))
+            self.submitButton = wx.Button(self.mainPanel, wx.ID_ANY, label="Query PUBG API", pos=(10,140), size=(440, 40))
             
             self.seasonLabel.Hide()
             self.seasonDropDown.Hide()
             self.noOfMatchesLabel.Hide()
             self.noOfMatches.Hide()
 
-            self.Bind(wx.EVT_RADIOBOX, self.hideOrShowRegion, source=self._PLATFORM_SELECT)
-            self.Bind(wx.EVT_RADIOBOX, self.changeRegionContent, source=self._CHOICES_SELECT)
-            self.Bind(wx.EVT_RADIOBOX, self.changeSeasonOrRegionCont, source=self._PLATFORM_SELECT)
-            self.Bind(wx.EVT_BUTTON, self.submitQuery, source=self.submit)
+            self.Bind(wx.EVT_RADIOBOX, self.hideOrShowRegion, source=self.platformSelect)
+            self.Bind(wx.EVT_RADIOBOX, self.changeRegionContent, source=self.optionChoicesSelect)
+            self.Bind(wx.EVT_RADIOBOX, self.changeSeasonOrRegionCont, source=self.platformSelect)
+            self.Bind(wx.EVT_BUTTON, self.submitButtonQuery, source=self.submitButton)
 
         def hideOrShowRegion(self, bool1, bool2):
             
@@ -199,84 +198,79 @@ if user_settings.GUI:
                 self.noOfMatchesLabel.Hide()
                 self.noOfMatches.Hide()
 
-        def submitQuery(self, evt):
+        def submitButtonQuery(self, evt):
             
             start_time = time.time()
-            _HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()        
-            _PLAT_CHOICE = self._PLATFORM_SELECT.GetItemLabel(self._PLATFORM_SELECT.GetSelection())
+            header = APIConfig(APISettings.API_TOKEN).setupAuth()        
+            platformChoice = self.platformSelect.GetItemLabel(self.platformSelect.GetSelection())
 
-            _URL = Shard.buildURL(_PLAT_CHOICE)
+            url = Shard.buildURL(platformChoice)
 
-            if self.regionDropDown.GetValue() != "":
-                
-                _REGION = self.regionDropDown.GetValue()
-                _player_object = player(_HEADER, _REGION)
-
-                if self.gameModeDrop.GetValue() != "":
-
-                    _MODE = self.gameModeDrop.GetValue()
-
-                    if self.apiTokenBox.GetValue() != "":
-
-                        _TOKEN = self.apiTokenBox.GetValue()
-
-                        if self.playerNameBox.GetValue() != "":
-
-                            _PLAYER = self.playerNameBox.GetValue()
-
-                            if self._CHOICES_SELECT.GetSelection() == 0:
-                                
-                                self.SetStatusText(f"Requesting and Parsing PUBG API Lifetime request for {_PLAYER}...")
-
-                                if _player_object.getAccountID(_PLAYER, _URL, 0, True) != False:
-                                    _player_object.lifetimeStats(_URL, _MODE.lower())
-
-                            elif self._CHOICES_SELECT.GetSelection() == 1:
-                                
-                                if self.seasonDropDown.GetValue() != "":
-                                    
-                                    _SEASON = self.seasonDropDown.GetValue()
-
-                                    self.SetStatusText(f"Requesting and Parsing PUBG API season data for season {_SEASON}...")
-
-                                    if _player_object.getAccountID(_PLAYER, _URL, 0, False) != False:
-                                        _player_object.seasonStats(_URL, _MODE.lower(), _SEASON)
-
-                                else:
-                                    self.SetStatusText(f"ERROR: Cannot enter non-numeric characters in no-of-matches box!")
-
-                            elif self._CHOICES_SELECT.GetSelection() == 2:
-
-                                if self.noOfMatches.GetValue() != "":
-
-                                    _AMOUNT = self.noOfMatches.GetValue()
-
-                                    self.SetStatusText(f"Requesting and Parsing {_AMOUNT} match responses from PUBG API... if this hangs it's fine")
-
-                                    if _player_object.getAccountID(_PLAYER, _URL, int(_AMOUNT), False) != False:
-                                        _player_object.displayMatches(_URL)
-
-                        else:
-                            self.SetStatusText(f"ERROR: Players name cannot be empty!")
-
-                    else:
-                        self.SetStatusText(f"ERROR: API TOKEN cannot be empty!")
-
-                else:
-                    self.SetStatusText(f"ERROR: Game Mode cannot be empty!")
-
-            else:
+            if not self.regionDropDown.GetValue():
                 self.SetStatusText(f"ERROR: Region cannot be empty!")
+                return
 
+            if not self.gameModeDrop.GetValue():
+                self.SetStatusText(f"ERROR: Game Mode cannot be empty!")
+                return
+
+            if not self.apiTokenBox.GetValue():
+                self.SetStatusText(f"ERROR: API Token cannot be empty!")
+                return
+
+            if not self.playerNameBox.GetValue():
+                self.SetStatusText(f"ERROR: Players Name cannot be empty!")
+                return
+            
+            playerRegion = self.regionDropDown.GetValue()
+            playerObject = player(header, playerRegion)
+            playerMode = self.gameModeDrop.GetValue()
+            playerName = self.playerNameBox.GetValue()
+
+            if self.optionChoicesSelect.GetSelection() == 0:
+                
+                self.SetStatusText(f"Requesting and Parsing PUBG API Lifetime request for {playerName}...")
+
+                if playerObject.getAccountID(playerName, url, 0, True) != False:
+                    playerObject.lifetimeStats(url, playerMode.lower())
+
+            elif self.optionChoicesSelect.GetSelection() == 1:
+                
+                if not self.seasonDropDown.GetValue():
+                    self.SetStatusText(f"ERROR: You must select a season!")
+                    return 
+                else:
+                    
+                    seasonValue = self.seasonDropDown.GetValue()
+
+                    self.SetStatusText(f"Requesting and Parsing PUBG API season data for season {seasonValue}...")
+
+                    if playerObject.getAccountID(playerName, url, 0, False) != False:
+                        playerObject.seasonStats(url, playerMode.lower(), seasonValue)
+
+            elif self.optionChoicesSelect.GetSelection() == 2:
+
+                if not self.noOfMatches.GetValue():
+                    self.SetStatusText(f"ERROR: Cannot enter non-numeric characters in no-of-matches box!")
+                    return 
+                else:
+
+                    matchAmountValue = self.noOfMatches.GetValue()
+
+                    self.SetStatusText(f"Requesting and Parsing {matchAmountValue} match responses from PUBG API... if this hangs it's fine")
+
+                    if playerObject.getAccountID(playerName, url, int(matchAmountValue), False) != False:
+                        playerObject.displayMatches(url)
+                    
             self.SetStatusText(f"Took {time.time() - start_time} seconds to complete parsing data...")
 
         def changeSeasonOrRegionCont(self, evt):
-            if self._PLATFORM_SELECT.GetSelection() == 0:
-                self.clearAndAppend(self.regionDropDown, self._PC_REGIONS, self.seasonDropDown, self._PC_SEASONS)
-            elif self._PLATFORM_SELECT.GetSelection() == 1:
-                self.clearAndAppend(self.regionDropDown, self._XBOX_REGIONS, self.seasonDropDown, self._XBOX_SEASONS)
-            elif self._PLATFORM_SELECT.GetSelection() == 2:
-                self.clearAndAppend(self.regionDropDown, self._PSN_REGIONS, self.seasonDropDown, self._PSN_SEASONS)
+            if self.platformSelect.GetSelection() == 0:
+                self.clearAndAppend(self.regionDropDown, self.pcRegions, self.seasonDropDown, self.pcSeasons)
+            elif self.platformSelect.GetSelection() == 1:
+                self.clearAndAppend(self.regionDropDown, self.xboxRegions, self.seasonDropDown, self.xboxSeasons)
+            elif self.platformSelect.GetSelection() == 2:
+                self.clearAndAppend(self.regionDropDown, self.psnRegions, self.seasonDropDown, self.psnSeasons)
 
         def clearAndAppend(self, obj1, obj1_item, obj2, obj2_item):
             obj1.Clear()
@@ -286,21 +280,21 @@ if user_settings.GUI:
             
         def changeRegionContent(self, evt):
             
-            if self._CHOICES_SELECT.GetSelection() == 0:
+            if self.optionChoicesSelect.GetSelection() == 0:
                 self.hideOrShowRegion(False, False)
-                self.outer.SetSize(440, 125)
+                self.outerBox.SetSize(440, 125)
                 self.SetSize(480, 250)
-                self.submit.SetSize(440, 40)
-            elif self._CHOICES_SELECT.GetSelection() == 1:
+                self.submitButton.SetSize(440, 40)
+            elif self.optionChoicesSelect.GetSelection() == 1:
                 self.hideOrShowRegion(True, False)
-                self.outer.SetSize(650, 125)
+                self.outerBox.SetSize(650, 125)
                 self.SetSize(690,250)
-                self.submit.SetSize(650, 40)
-            elif self._CHOICES_SELECT.GetSelection() == 2:
+                self.submitButton.SetSize(650, 40)
+            elif self.optionChoicesSelect.GetSelection() == 2:
                 self.hideOrShowRegion(False, True)
-                self.outer.SetSize(560, 125)
+                self.outerBox.SetSize(560, 125)
                 self.SetSize(600,250)
-                self.submit.SetSize(560, 40)
+                self.submitButton.SetSize(560, 40)
 
     # Main program loop
     def main():

@@ -1,283 +1,307 @@
-#import pythons requests, json, sys, ps amd datetime lib
-import requests, json, sys,  xlsxwriter
-from os import path, system
+# import pythons requests, json, sys, ps amd datetime lib
+from config import user_settings
+from exceptions.connectionTimeOut import connectionTimeOut
+from exceptions.seasonStatsNotFound import seasonStatsNotFound
+from exceptions.playerNotFound import playerNotFound
+from exceptions.rateLimit import rateLimitReached
+from parsers.APIResponse import APIResponse
+from utility.endpoint.filters import APIFilter
+from helper.helperFunctions import returnMapName, getSeasonRank
+import requests, json, sys, xlsxwriter
+
+from os import(
+    path, 
+    system
+)
+
 from datetime import datetime
 from time import sleep
 
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
-##Import my tools to be used
-from helper.helperFunctions import returnMapName, getSeasonRank
-from utility.endpoint.filters import APIFilter
-from parsers.APIResponse import APIResponse
+# Import my tools to be used
 
-##Import exceptions that can be defined
-from exceptions.rateLimit import rateLimitReached
-from exceptions.playerNotFound import playerNotFound
-from exceptions.seasonStatsNotFound import seasonStatsNotFound
-from exceptions.connectionTimeOut import connectionTimeOut
+# Import exceptions that can be defined
 
-from config import user_settings
 
 class D(dict):
     def __missing__(self, key):
         self[key] = D()
         return self[key]
 
+
 class player():
     '''
         1. Describes the Player you want to lookup.
 
-        2. Holds player stats - such as Account ID, Account Name, and a list of recent Match ID's
+        2. Holds player stats - such as Account playerID, Account Name, and a list of recent Match playerID's
     '''
 
     if user_settings.GUI:
-    
-        def __init__(self, _header, _region):
-            self._HEADER = _header
-            self.ID = ""
-            self.NAME = ""
-            self.MATCH_IDS = list()
-            self.SEASONS = list()
-            self.REGION = _region
-    
+
+        def __init__(self, inputHeader, inputRegion):
+            self.header = inputHeader
+            self.playerID = ""
+            self.playerName = ""
+            self.matchIDS = list()
+            self.seasonValues = list()
+            self.playerRegion = inputRegion
+
     else:
 
-        def __init__(self, _header):
-            self._HEADER = _header
-            self.ID = ""
-            self.NAME = ""
-            self.MATCH_IDS = list()
-            self.SEASONS = list()
+        def __init__(self, inputHeader):
+            self.header = inputHeader
+            self.playerID = ""
+            self.playerName = ""
+            self.matchIDS = list()
+            self.seasonValues = list()
 
-    def getAccountID(self, _PLAYER_NAME, _BASE_URL, _NO_MATCHES, _LIFETIME: bool):
+    def getAccountID(self, inputPlayerName, inputURL, inputNoOfMatches, lifeTimeOrNot: bool):
         '''
-            Grabs the users Account ID based on the API's response from the users name. Sets up the Player object.
+            Grabs the users Account playerID based on the API's response from the users name. Sets up the Player object.
 
             playerName - the players name (case-sensitive)
 
-            _BASE_URL - the API's base URL
+            inputURL - the API's base URL
 
-            _NO_MATCHES - an integer representing the number of matches that you want to display - which is passed on to processPlayerObject().
+            inputNoOfMatches - an integer representing the number of matches that you want to display - which is passed on to processPlayerObject().
             This also seems to be unique per player.
 
-            _LIFETIME - bool representing whether it's a lifetime or seasonal request
+            lifeTimeOrNot - bool representing whether it's a lifetime or seasonal request
         '''
-        _PLAYER_URL = APIFilter.buildPlayerFilter(_BASE_URL, _PLAYER_NAME)
+        playerURL = APIFilter.buildPlayerFilter(inputURL, inputPlayerName)
 
         try:
-            _PLAYER_REQUEST = requests.get(_PLAYER_URL, headers=self._HEADER)
-            _PLAYER_REQUEST.close()     
+            playerAPIRequest = requests.get(playerURL, headers=self.header)
+            playerAPIRequest.close()
         except Exception as Excep:
             connectionTimeOut(Excep)
 
-        self.NAME = _PLAYER_NAME
-        
-        _API_RESPONSE = json.loads(_PLAYER_REQUEST.text)
+        self.playerName = inputPlayerName
 
-        if 'errors' in _API_RESPONSE:
-            playerNotFound(_PLAYER_NAME)
+        apiResponse = json.loads(playerAPIRequest.text)
+
+        if 'errors' in apiResponse:
+            playerNotFound(inputPlayerName)
             return False
         else:
-            
-            _MATCHES = []
 
-            for _MATCH_ID in _API_RESPONSE['data'][0]['relationships']['matches']['data']:
-                if not _LIFETIME and len(_MATCHES) < _NO_MATCHES and _MATCH_ID['id'] is not None:
-                    _MATCHES.append(_MATCH_ID['id'])
+            matches = []
 
-            self.ID = _API_RESPONSE['data'][0]['id']
+            for matchID in apiResponse['data'][0]['relationships']['matches']['data']:
+                if not lifeTimeOrNot and len(matches) < inputNoOfMatches and matchID['id'] is not None:
+                    matches.append(matchID['id'])
 
-            if len(_MATCHES) != 0 and not _LIFETIME:
-                self.setMatches(_MATCHES)
+            self.playerID = apiResponse['data'][0]['id']
+
+            if len(matches) != 0 and not lifeTimeOrNot:
+                self.setMatches(matches)
 
             return True
 
-    def seasonStats(self, _BASE_URL, _GAME_MODE, _SEASON):
+    def seasonStats(self, inputURL, inputGameMode, inputSeason):
         '''
             Proccesses and displays the users lifetime stats.
 
-            _API_RESPONSE is the PUBG API's response.
+            apiResponse is the PUBG API's response.
 
-            _NO_MATCHES is an integer representing the number of matches you want to display.
+            inputNoOfMatches is an integer representing the number of matches you want to display.
 
-            _SEASON - SEASON ID
+            inputSeason - SEASON playerID
 
         '''
 
-        _local_season = APIResponse(_GAME_MODE, self, _season=_SEASON)
-        _local_season.parseJSONSeasonAndLifetimeResponse(_BASE_URL)
+        localSeasons = APIResponse(inputGameMode, self, seasonValue=inputSeason)
+        localSeasons.parseJSONSeasonAndLifetimeResponse(inputURL)
 
-    def lifetimeStats(self, _BASE_URL, _GAME_MODE):
+    def lifetimeStats(self, inputURL, inputGameMode):
         '''
             Proccesses and displays the users lifetime stats.
 
-            _API_RESPONSE is the PUBG API's response.
+            apiResponse is the PUBG API's response.
 
-            _NO_MATCHES is an integer representing the number of matches you want to display.
+            inputNoOfMatches is an integer representing the number of matches you want to display.
 
-            _SEASON - SEASON ID
+            inputSeason - SEASON playerID
 
         '''
 
-        _local_season = APIResponse(_GAME_MODE, self)
-        _local_season.parseJSONSeasonAndLifetimeResponse(_BASE_URL)
+        localSeasons = APIResponse(inputGameMode, self)
+        localSeasons.parseJSONSeasonAndLifetimeResponse(inputURL)
 
-
-    def setPlayerID(self, identity):
-        self.ID = identity
+    def setAccountID(self, inputPlayerID):
+        self.playerID = inputPlayerID
 
     def getPlayerID(self):
-        return self.ID
+        return self.playerID
 
     def setPlayerName(self, name):
-        self.NAME = name
+        self.playerName = name
 
     def getPlayerName(self):
-        return self.NAME
+        return self.playerName
 
     def setMatches(self, matches: list):
-        
+
         if isinstance(matches, list):
-            [self.MATCH_IDS.append(x) for x in matches]
+            [self.matchIDS.append(x) for x in matches]
         else:
             raise TypeError("Matches must be of type List")
 
     def getMatches(self):
-        return self.MATCH_IDS
+        return self.matchIDS
 
-    def displayMatches(self, _BASE_URL):
+    def displayMatches(self, inputURL):
         '''
             Displays a number of matches.
         '''
-        
-        _DATES = []
-        _DAMAGE = []
-        _MAP = []
-        _GAMEMODE = []
-        _WIN = []
-        _KILLS = []
 
-        _WIN_COUNT = 0
-        _KILL_COUNT = 0
-        _DAMAGE_COUNT = 0
+        matchDates = []
+        matchDamage = []
+        matchMap = []
+        matchGameMode = []
+        matchPlacement = []
+        matchKills = []
 
-        _EXCEL_GRAPH_X_COL = []
-        _EXCEL_GRAPH_Y_COL = []
+        totalWinCount = 0
+        totalKillCount = 0
+        totalDamageCount = 0
+        i = 0
 
-        for _MATCH_ID in self.getMatches():
-            
-            _URL = _BASE_URL+APIFilter.MATCH_FILTER.value.replace('$matchID', _MATCH_ID)
+        excelXCol = []
+        excelYCol = []
 
-            _REQUEST = requests.get(_URL, headers=self._HEADER)
+        for matchID in self.getMatches():
 
-            if _REQUEST.status_code == 429:
+            url = inputURL + APIFilter.MATCH_FILTER.value.replace('$matchID', matchID)
+
+            matchEndpointRequest = requests.get(url, headers=self.header)
+
+            if matchEndpointRequest.status_code == 429:
                 rateLimitReached()
-                _REQUEST = requests.get(_URL, headers=self._HEADER)
-                _REQUEST.close()
+                matchEndpointRequest = requests.get(url, headers=self.header)
+                matchEndpointRequest.close()
 
-            _RESPONSE = json.loads(_REQUEST.text)
-            
-            if _RESPONSE['data']['attributes']['mapName'] == 'Range_Main':
+            matchEndpointResponse = json.loads(matchEndpointRequest.text)
+
+            if matchEndpointResponse['data']['attributes']['mapName'] == 'Range_Main':
                 continue
             else:
-                _JSON_TIME_DATA = datetime.strptime(_RESPONSE['data']['attributes']['createdAt'].replace('Z',''),"%Y-%m-%dT%H:%M:%S")
-                _DATES.append(str(_JSON_TIME_DATA.strftime('%m/%d/%Y')))
-                _MAP.append(returnMapName(_RESPONSE['data']['attributes']['mapName']))
-                _GAMEMODE.append(_RESPONSE['data']['attributes']['gameMode'].upper())
-                for _STAT in _RESPONSE['included']:
-                    if 'stats' in _STAT['attributes'] and 'playerId' in _STAT['attributes']['stats'] and _STAT['attributes']['stats']['playerId'] == self.getPlayerID():
-                        _DAMAGE.append(round(_STAT['attributes']['stats']['damageDealt'],2))
-                        _WIN.append(f"{_STAT['attributes']['stats']['winPlace']}/100")
-                        _KILLS.append(f"{_STAT['attributes']['stats']['kills']}")
+
+                matchTimeData = datetime.strptime(matchEndpointResponse['data']['attributes']['createdAt'].replace('Z', ''), "%Y-%m-%dT%H:%M:%S")
+
+                matchDates.append(str(matchTimeData.strftime('%m/%d/%Y')))
+
+                matchMap.append(returnMapName(matchEndpointResponse['data']['attributes']['mapName']))
+
+                matchGameMode.append(matchEndpointResponse['data']['attributes']['gameMode'].upper())
+
+                for playerStat in matchEndpointResponse['included']:
+
+                    if 'stats' in playerStat['attributes'] and 'playerId' in playerStat['attributes']['stats'] and playerStat['attributes']['stats']['playerId'] == self.getPlayerID():
+
+                        matchDamage.append(round(playerStat['attributes']['stats']['damageDealt'], 2))
+
+                        matchPlacement.append(f"{playerStat['attributes']['stats']['winPlace']}/100")
+
+                        matchKills.append(f"{playerStat['attributes']['stats']['kills']}")
+
                         break
-        
-        _EXCEL_GRAPH_Y_COL = set()
+            i+=1
+            print(f"Match request {i} completed...")
 
-        for _WIN_INT, _KILL_INT, _DAMAGE_INT, _DATE  in zip(_WIN, _KILLS, _DAMAGE, _DATES):
-            _KILL_COUNT += int(_KILL_INT.replace('kills','').strip())
-            _DAMAGE_COUNT += _DAMAGE_INT
-            _EXCEL_GRAPH_Y_COL.add(_DATE)
-            if _WIN_INT == '1/100':
-                _WIN_COUNT += 1
+        excelYCol = set()
 
-        _LOCAL_KILLS = 0
-        
-        ##This will be the dataset we use.
-        DATE_DICT = D({
+        for matchPlacementStr, matchKillStr, matchDamageStr, matchDateStr in zip(matchPlacement, matchKills, matchDamage, matchDates):
+            totalKillCount += int(matchKillStr.replace('kills', '').strip())
+            totalDamageCount += matchDamageStr
+            excelYCol.add(matchDateStr)
+            if matchPlacementStr == '1/100':
+                totalWinCount += 1
+
+        localKillsForDateCount = 0
+
+        # This will be the dataset we use.
+        dateDict = D({
             'dates': {
 
             }
         })
 
-        kill_values = []
+        totalKillsForDates = []
 
-        for i, x in enumerate(_DATES):
-            
-            if i+1 <= len(_DATES)-1:
+        del i
 
-                if x == _DATES[i+1]:
-                    _LOCAL_KILLS += int(_KILLS[i])
+        for i, x in enumerate(matchDates):
+
+            if i+1 <= len(matchDates)-1:
+
+                if x == matchDates[i+1]:
+                    localKillsForDateCount += int(matchKills[i])
                 else:
-                    DATE_DICT['dates'][x] = _LOCAL_KILLS
-                    kill_values.append(_LOCAL_KILLS)
-                    _LOCAL_KILLS = 0
+                    dateDict['dates'][x] = localKillsForDateCount
+                    totalKillsForDates.append(localKillsForDateCount)
+                    localKillsForDateCount = 0
 
             else:
-                
-                if x == _DATES[len(_DATES)-1]:
-                    _LOCAL_KILLS += int(_KILLS[i])
-                    DATE_DICT['dates'][x] = _LOCAL_KILLS
-                    kill_values.append(_LOCAL_KILLS)
-                    _LOCAL_KILLS = 0
 
-        data_start_loc = [0, 0] # xlsxwriter rquires list, no tuple
-        data_end_loc = [data_start_loc[0] + len(DATE_DICT['dates'])-1, 0]
+                if x == matchDates[len(matchDates)-1]:
+                    localKillsForDateCount += int(matchKills[i])
+                    dateDict['dates'][x] = localKillsForDateCount
+                    totalKillsForDates.append(localKillsForDateCount)
+                    localKillsForDateCount = 0
 
-        workbook = xlsxwriter.Workbook(f'DATA/{self.NAME}-{len(_MAP)}Matches.xlsx')
-        
+        excelDataStartLOC = [0, 0]  # xlsxwriter rquires list, no tuple
+        excelDataEndLOC = [excelDataStartLOC[0] + len(dateDict['dates'])-1, 0]
+
+        workbook = xlsxwriter.Workbook(f'DATA/{self.playerName}-{len(matchMap)}Matches.xlsx')
+
         chart = workbook.add_chart({
             'type': 'line'
         })
-        
+
         chart.set_y_axis({
             'name': 'Kills per day'
         })
-        
+
         chart.set_x_axis({
             'name': 'Day'
         })
-        
+
         chart.set_title({
-            'name': f'Amount of kills from {min(_EXCEL_GRAPH_Y_COL)} - {max(_EXCEL_GRAPH_Y_COL)}'
+            'name': f'Amount of kills from {min(excelYCol)} - {max(excelYCol)}'
         })
 
         worksheet = workbook.add_worksheet()
 
-        # A chart requires data to reference data inside excel
-        worksheet.write_column(*data_start_loc, data=reversed(kill_values))
+        # A chart requires data to reference data insplayerIDe excel
+        worksheet.write_column(*excelDataStartLOC, data=reversed(totalKillsForDates))
         chart.add_series({
-            'values': [worksheet.name] + data_start_loc + data_end_loc,
+            'values': [worksheet.name] + excelDataStartLOC + excelDataEndLOC,
             'name': "Kills",
         })
-        
+
         worksheet.insert_chart('B1', chart)
         workbook.close()  # Write to file
 
-        if user_settings.GUI: 
-        
-            _FILENAME = f'DATA/{self.NAME}-{len(_MAP)}Matches.csv'
-                
-            with open(_FILENAME, 'w+', encoding="utf-8") as f:
-                f.write('{},{},{},{},{},{},{}\n'.format('MATCH', 'DATE', 'PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS'))
-                for i, item in enumerate(zip(_DATES, _WIN, _MAP, _GAMEMODE, _DAMAGE, _KILLS)):
+        if user_settings.GUI:
+
+            fileName = f'DATA/{self.playerName}-{len(matchMap)}Matches.csv'
+
+            with open(fileName, 'w+', encoding="utf-8") as f:
+                f.write('{},{},{},{},{},{},{}\n'.format('MATCH', 'DATE','PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS'))
+                for i, item in enumerate(zip(matchDates, matchPlacement, matchMap, matchGameMode, matchDamage, matchKills)):
                     f.write('{},{},{},{},{},{},{}\n'.format(i+1, *item))
-                f.write(f'\n  Stats for {self.NAME} accross {len(_MAP)} matches\n  - Won {_WIN_COUNT} out of {len(_MAP)} games\n  - Averages {round(_KILL_COUNT / len(_KILLS), 2)} kills per game\n  - Total of {_KILL_COUNT} kills and {round(_DAMAGE_COUNT,2)} damage across {round(len(_KILLS), 2)} matches\n  - Highest kill game of {max(_KILLS)} in {_GAMEMODE[_KILLS.index(max(_KILLS))]}\n')
+                f.write(
+                    f'\n  Stats for {self.playerName} accross {len(matchMap)} matches\n  - Won {totalWinCount} out of {len(matchMap)} games\n  - Averages {round(totalKillCount / len(matchKills), 2)} kills per game\n  - Total of {totalKillCount} kills and {round(totalDamageCount,2)} damage across {round(len(matchKills), 2)} matches\n  - Highest kill game of {max(matchKills)} in {matchGameMode[matchKills.index(max(matchKills))]}\n')
 
         else:
 
-            print('\n|-------------------------------------------------------------------------------------------------------------------|\n| {:<5} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} |'.format('MATCH', 'DATE', 'PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS')+'\n|-------------------------------------------------------------------------------------------------------------------|')
-            for i, item in enumerate(zip(_DATES, _WIN, _MAP, _GAMEMODE, _DAMAGE, _KILLS)):
+            print('\n|-------------------------------------------------------------------------------------------------------------------|\n| {:<5} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} |'.format(
+                'MATCH', 'DATE', 'PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS')+'\n|-------------------------------------------------------------------------------------------------------------------|')
+            for i, item in enumerate(zip(matchDates, matchPlacement, matchMap, matchGameMode, matchDamage, matchKills)):
                 print('| {:<5} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} |\n|-------------------------------------------------------------------------------------------------------------------|'.format(i+1, *item))
-            print('| {:<5} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} |\n|-------------------------------------------------------------------------------------------------------------------|\n'.format('MATCH', 'DATE', 'PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS'))
-            print(f'\n  Stats for {self.NAME} accross {len(_MAP)} matches\n  - Won {_WIN_COUNT} out of {len(_MAP)} games\n  - Averages {round(_KILL_COUNT / len(_KILLS), 2)} kills per game\n  - Total of {_KILL_COUNT} kills and {round(_DAMAGE_COUNT,2)} damage across {round(len(_KILLS), 2)} matches\n  - Highest kill game of {max(_KILLS)} in {_GAMEMODE[_KILLS.index(max(_KILLS))]}\n')
+            print('| {:<5} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} | {:<15} |\n|-------------------------------------------------------------------------------------------------------------------|\n'.format(
+                'MATCH', 'DATE', 'PLACEMENT', 'MAP', 'MODE', 'DAMAGE', 'KILLS'))
+            print(
+                f'\n  Stats for {self.playerName} accross {len(matchMap)} matches\n  - Won {totalWinCount} out of {len(matchMap)} games\n  - Averages {round(totalKillCount / len(matchKills), 2)} kills per game\n  - Total of {totalKillCount} kills and {round(totalDamageCount,2)} damage across {round(len(matchKills), 2)} matches\n  - Highest kill game of {max(matchKills)} in {matchGameMode[matchKills.index(max(matchKills))]}\n')

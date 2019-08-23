@@ -2,7 +2,7 @@ from config import user_settings
 
 
 def returnMapName(codename):
-    map_dict = {
+    mapDict = {
         "Baltic_Main": "Erangel",
         "Erangel_Main": "Erangel",
         "DihorOtok_Main": "Vikendi",
@@ -10,7 +10,7 @@ def returnMapName(codename):
         "Savage_Main": "Sanhok"
     }
 
-    return map_dict.get(codename.strip())
+    return mapDict.get(codename.strip())
 
 class RangeDict(dict):
     ''' 
@@ -68,9 +68,9 @@ if not user_settings.GUI:
 
     def regionCheck(season):
 
-        _NEEDS_REGION = ['division.bro.official.2017-beta', 'division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3', 'division.bro.official.2017-pre4', 'division.bro.official.2017-pre5', 'division.bro.official.2017-pre6', 'division.bro.official.2017-pre7',
+        seasonsThatNeedRegion = ['division.bro.official.2017-beta', 'division.bro.official.2017-pre1', 'division.bro.official.2017-pre2', 'division.bro.official.2017-pre3', 'division.bro.official.2017-pre4', 'division.bro.official.2017-pre5', 'division.bro.official.2017-pre6', 'division.bro.official.2017-pre7',
             'division.bro.official.2017-pre8','division.bro.official.2017-pre9','division.bro.official.2018-01','division.bro.official.2018-02','division.bro.official.2018-03','division.bro.official.2018-04','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07',
             'division.bro.official.2018-08','division.bro.official-2018-09','division.bro.official.2018-05','division.bro.official.2018-06','division.bro.official.2018-07', 'division.bro.official.2018-08','division.bro.official.2018-09']
 
-        if season in _NEEDS_REGION:
+        if season in seasonsThatNeedRegion:
             print('this season will need a region, which you will be asked to enter shortly')

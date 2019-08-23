@@ -12,19 +12,19 @@ user_input = int(user_input)
 
 start_time = time.time()
 
-_HEADER = APIConfig(APISettings.API_TOKEN).setupAuth()
+header = APIConfig(APISettings.API_TOKEN).setupAuth()
 
 if user_input in range(1,4):
 
     if user_input == 1: ##Lifetime
         system('cls')
-        API_INTERFACE.lifetimeStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.PLAYER_GAME_MODE)
+        API_INTERFACE.lifetimeStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, header, user_settings.PLAYER_GAME_MODE)
     elif user_input == 2: ##Season
         system('cls')
         regionCheck(user_settings.SEASON_VAL)
-        API_INTERFACE.seasonStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.PLAYER_GAME_MODE, user_settings.SEASON_VAL)
+        API_INTERFACE.seasonStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, header, user_settings.PLAYER_GAME_MODE, user_settings.SEASON_VAL)
     elif user_input == 3: ##Match stats
         system('cls')
-        API_INTERFACE.matchStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, _HEADER, user_settings.MATCH_INTEGER)
+        API_INTERFACE.matchStats(user_settings.PLAYER_NAME, user_settings.PLAYER_PLATFORM, header, user_settings.MATCH_INTEGER)
         
     print("--- took %s seconds ---" % (time.time() - start_time))
